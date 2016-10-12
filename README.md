@@ -1,6 +1,6 @@
 ## Description
 
-This proof of concept describes a novel method to eliminate correlation attacks on anonimity networks such as Tor and I2P.
+This proof of concept describes a novel method to eliminate correlation attacks on anonymity networks such as Tor and I2P.
 
 It uses asymmetric crypto to enforce dummy traffic, rendering a passive global attacker unable to do correlation attacks on low-latency anonymity networks. It's not intended for actual usage due to various issues related to reliability and performance.
 
