@@ -10,7 +10,7 @@ But since - as far as I know - it's a novel way of using crypto I'm publishing i
 
 Low latency anonymity networks such as Tor and I2P are known to be vulnerable to traffic analysis attacks. A global passive attacker (anyone monitoring a large enough portion of all traffic) can use correlation to determine the source of a given stream of traffic.
 
-This can be resolved by sending enough dummy traffic across the network. If only Alice and Bob know whether a given message is genuine or fake after decrypting the message, a passive attacker cannot know when genuine messages are sent. If Alice and Bob and every other node in the network cannot decrypt a message until they have received a message from every other node in the network, correlation attacks are impossible.
+This can be resolved by sending enough dummy traffic across the network. If only Alice and Bob know whether a given message is genuine or fake after decrypting the message, a passive attacker cannot know when genuine messages are sent. **If Alice and Bob and every other node in the network cannot decrypt a message until they have received a message from every other node in the network**, correlation attacks are impossible.
 
 My approach does not defend against malicious nodes, for that you would need to implement an onion routing network on top of this.
 
