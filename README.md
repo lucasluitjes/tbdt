@@ -47,7 +47,7 @@ The disadvantage is that the identity of a given node can be narrowed down to th
 
 If one node goes down, the entire network goes down. This is by design, to prevent an attacker from discovering the identity of the source by waiting until it goes down temporarily. There should be a time-out at which point the network recovers without the unreliable node. This time-out should be large enough that an attacker cannot simply compromise anonymity by DoSing one node at a time.
 
-It would be trivial to keep the network down by repeatedly joining the network and not sending any messages. This can be mitigated somewhat with reputation management. The cost of the attack can also be increased slightly, by requiring new nodes to succesfully participate in the network for some amount of time before actually using their pulse key-pairs.
+It would be trivial to keep the network down by repeatedly joining the network and not sending any messages. This can be mitigated somewhat with reputation management. The cost of the attack can also be increased slightly, by requiring new nodes to successfully participate in the network for some amount of time before actually using their pulse key-pairs.
 
 ## Disclaimers
 
