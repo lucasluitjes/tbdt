@@ -59,6 +59,7 @@ The code in this repository is a Proof of Concept and nothing more. It uses JSON
 
 The test script spins up a directory server and three nodes. They send pulses until the test script forces one of the nodes to stop responding, at which point the logs will show that all traffic stops. 
 
-* install ```sinatra```, ```restclient``` and ```rbnacl``` gems
-* ```ruby test.rb```
-
+```
+bundle install
+bundle exec ruby test.rb
+```
