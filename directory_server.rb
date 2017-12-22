@@ -1,15 +1,15 @@
 require 'sinatra'
 require 'json'
 
-$lock = Mutex.new
-$nodes = []
+Lock = Mutex.new
+Nodes = []
 
 post '/nodes' do
   body = JSON.parse(request.body.read)
 
-  $lock.synchronize do
-    result = $nodes.to_json
-    $nodes << body
+  Lock.synchronize do
+    result = Nodes.to_json
+    Nodes << body
     result
   end
 end

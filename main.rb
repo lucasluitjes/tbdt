@@ -28,7 +28,7 @@ DIE_EVENTUALLY = settings.port == 8081
 
 Controller.instance = Controller.new(environment: :testing)
 
-$die = 0
+DEATH = { counter: 0 }
 
 set :show_exceptions, false
 
@@ -50,7 +50,7 @@ post '/nodes' do
 end
 
 post '/messages' do
-  if DIE_EVENTUALLY && ($die += 1) > 100
+  if DIE_EVENTUALLY && (DEATH[:counter] += 1) > 100
     # quickndirty way to kill one instance and get proof that the network
     # goes down subsequently
     500
