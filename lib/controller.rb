@@ -5,7 +5,7 @@ class Controller
     attr_accessor :instance
   end
 
-  def initialize opts
+  def initialize(opts)
     @inbox, @encrypted_messages, @decrypted_messages = [], [], []
     @key_pairs = { SELF_KEYPAIR.id => SELF_KEYPAIR }
 
@@ -13,10 +13,11 @@ class Controller
 
     @current_key_pair = KeyPair.generate
 
-# in test context we spin up two nodes simultaneously, sleep to be sure they exist when they register with eachother
+    # in test context we spin up two nodes simultaneously, sleep to be
+    # sure they exist when they register with each other
     sleep 1 if opts[:environment] == :testing && !@nodes.empty?
 
-    @nodes.each {|n| n.register(@current_key_pair) }
+    @nodes.each { |n| n.register(@current_key_pair) }
   end
 
   def send_pulse
@@ -32,7 +33,7 @@ class Controller
     @current_key_pair = new_key_pair
   end
 
-  def send_messages new_key_pair, public_keys
+  def send_messages(new_key_pair, public_keys)
     @nodes.each do |node|
       message = Message.new(
         plaintext: node.next_message_plaintext,
@@ -41,15 +42,15 @@ class Controller
         encrypt: [public_keys, SELF_KEYPAIR]
       )
 
-      node.send_message(message) 
+      node.send_message(message)
     end
   end
 
   def ready_for_pulse?
-    !@nodes.empty? && !@nodes.map {|n| n.pulse_pubkeys.empty?}.include?(true)
+    !@nodes.empty? && !@nodes.map { |n| n.pulse_pubkeys.empty? }.include?(true)
   end
 
-  def add_node node, key_pair
+  def add_node(node, key_pair)
     node.pulse_pubkeys << key_pair
     @key_pairs[key_pair.id] = key_pair
     @nodes << node
@@ -57,10 +58,10 @@ class Controller
     send_pulse
   end
 
-  def process_message node, message
+  def process_message(node, message)
     @key_pairs[message.current_key_pair.id] = message.current_key_pair
 
-    node.pulse_pubkeys << message.next_public_key 
+    node.pulse_pubkeys << message.next_public_key
     @encrypted_messages << { node: node, message: message }
 
     decrypt_messages!
@@ -69,12 +70,13 @@ class Controller
 
   def decrypt_messages!
     @encrypted_messages.delete_if do |encrypted_message|
-      message, node = encrypted_message[:message], encrypted_message[:node]
+      message = encrypted_message[:message]
+      node = encrypted_message[:node]
 
-      if message.decryptable?(@key_pairs) 
+      if message.decryptable?(@key_pairs)
         message.decrypt!(@key_pairs, node.public_key)
         inbox_entry = { sender: node.uri, content: message.plaintext.strip }
-        @decrypted_messages << inbox_entry unless message.is_dummy?
+        @decrypted_messages << inbox_entry unless message.dummy?
       end
     end
   end
@@ -85,7 +87,7 @@ class Controller
     result
   end
 
-  def next_message_for_node node_uri, message_content
+  def next_message_for_node(node_uri, message_content)
     @nodes.find { |n| n.uri == node_uri }.message_queue << message_content
   end
 end

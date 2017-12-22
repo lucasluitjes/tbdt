@@ -6,7 +6,7 @@ module RbNaCl
       to_bytes.to_base64
     end
 
-    def self.from_base64 str
+    def self.from_base64(str)
       if str.is_a?(PrivateKey)
         str
       else
@@ -20,7 +20,7 @@ module RbNaCl
       to_bytes.to_base64
     end
 
-    def self.from_base64 str
+    def self.from_base64(str)
       if str.is_a?(PublicKey)
         str
       else
@@ -31,8 +31,8 @@ module RbNaCl
 end
 
 class Hash
-  def filter white_list
-    select{|k,v| white_list.map(&:to_sym).include?(k.to_sym) }
+  def filter(white_list)
+    select { |k, _v| white_list.map(&:to_sym).include?(k.to_sym) }
   end
 end
 
@@ -40,6 +40,7 @@ class String
   def to_base64
     Base64.encode64(self)
   end
+
   def from_base64
     Base64.decode64(self)
   end

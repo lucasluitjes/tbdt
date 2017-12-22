@@ -1,6 +1,5 @@
-ServiceManager.define_service "directory_server" do |s|
-
-  s.host       = "localhost"
+ServiceManager.define_service 'directory_server' do |s|
+  s.host       = 'localhost'
   s.port       = 8070
 
   s.start_cmd  = "ruby directory_server.rb -p #{s.port}"
@@ -11,13 +10,11 @@ ServiceManager.define_service "directory_server" do |s|
   s.cwd        = Dir.pwd
 
   s.timeout    = 120
-
 end
 
 3.times do |i|
   ServiceManager.define_service "node#{i + 1}" do |s|
-
-    s.host       = "localhost"
+    s.host       = 'localhost'
     s.port       = 8081 + i
 
     s.start_cmd  = "ruby main.rb -p #{s.port}"
@@ -28,6 +25,5 @@ end
     s.cwd        = Dir.pwd
 
     s.timeout    = 120
-
   end
 end

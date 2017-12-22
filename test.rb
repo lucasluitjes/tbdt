@@ -2,8 +2,8 @@ require 'pp'
 require 'service_manager'
 require 'restclient'
 
-def post_json url, obj
-  RestClient.post url, obj.to_json, :content_type => :json, :accept => :json
+def post_json(url, obj)
+  RestClient.post url, obj.to_json, content_type: :json, accept: :json
 end
 
 puts "\n\n\n"
@@ -16,9 +16,9 @@ sleep 2
 
 # send a message from localhost:8081 to localhost:8082
 post_json('http://localhost:8081/outbox', [{
-  destination_uri: 'localhost:8082',
-  content: 'hello world!'
-}])
+            destination_uri: 'localhost:8082',
+            content: 'hello world!'
+          }])
 
 sleep 7
 

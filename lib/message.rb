@@ -1,15 +1,15 @@
 class Message
-  ATTRIBUTES = [:ciphertext, :plaintext, :key_ids, :current_key_pair, :next_public_key]
+  ATTRIBUTES = %i[ciphertext plaintext key_ids current_key_pair next_public_key].freeze
 
-  attr_accessor *ATTRIBUTES
+  attr_accessor(*ATTRIBUTES)
 
-  def initialize opts={}
-    opts.filter(ATTRIBUTES).each {|k,v| send(:"#{k}=",v) }
-    
+  def initialize(opts = {})
+    opts.filter(ATTRIBUTES).each { |k, v| send(:"#{k}=", v) }
+
     encrypt!(*opts[:encrypt]) if opts[:encrypt]
   end
 
-  def encrypt! public_keys, sender_key
+  def encrypt!(public_keys, sender_key)
     ensure_message_length!
     @key_ids = public_keys.map(&:id)
 
@@ -27,7 +27,7 @@ class Message
     self.plaintext = plaintext[0, MESSAGE_LENGTH].ljust(MESSAGE_LENGTH, ' ')
   end
 
-  def decrypt! keys, sender_key
+  def decrypt!(keys, sender_key)
     self.plaintext = ciphertext
     key_ids.reverse.each do |key_id|
       box = SimpleBox.from_keypair(
@@ -38,25 +38,25 @@ class Message
     end
   end
 
-  def to_json *opts
-    { 
-      ciphertext: ciphertext.to_base64, 
+  def to_json(*opts)
+    {
+      ciphertext: ciphertext.to_base64,
       key_ids: key_ids,
       current_key_pair: current_key_pair,
       next_public_key: next_public_key
     }.to_json(opts)
   end
 
-  def is_dummy?
+  def dummy?
     plaintext == DUMMY_MESSAGE
   end
 
-  def decryptable? key_pairs
-    !key_ids.map {|n| key_pairs[n] }.include?(nil)
+  def decryptable?(key_pairs)
+    !key_ids.map { |n| key_pairs[n] }.include?(nil)
   end
 
-  def self.from_json json
-    msg = Message.new(json.filter([:ciphertext, :plaintext, :key_ids]))
+  def self.from_json(json)
+    msg = Message.new(json.filter(%i[ciphertext plaintext key_ids]))
 
     msg.ciphertext = msg.ciphertext.from_base64.force_encoding('BINARY')
     msg.current_key_pair = KeyPair.new(json['current_key_pair'])
@@ -65,4 +65,3 @@ class Message
     msg
   end
 end
-

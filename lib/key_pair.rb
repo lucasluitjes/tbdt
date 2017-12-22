@@ -1,10 +1,10 @@
 class KeyPair
-  ATTRIBUTES = [:id, :private_key, :public_key]
+  ATTRIBUTES = %i[id private_key public_key].freeze
 
-  attr_accessor *ATTRIBUTES
+  attr_accessor(*ATTRIBUTES)
 
-  def initialize opts={}
-    opts.filter(ATTRIBUTES).each {|k,v| send(:"#{k}=",v) }
+  def initialize(opts = {})
+    opts.filter(ATTRIBUTES).each { |k, v| send(:"#{k}=", v) }
 
     self.private_key = PrivateKey.from_base64(private_key) if private_key
     self.public_key = PublicKey.from_base64(public_key) if public_key
@@ -19,7 +19,7 @@ class KeyPair
     )
   end
 
-  def to_json *opts
+  def to_json(*_opts)
     {
       id: id,
       private_key: private_key && private_key.to_base64,
